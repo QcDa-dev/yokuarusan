@@ -5,79 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>使い方ガイド - よくある質問・相談さん</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; }
-        .step-card { @apply bg-white p-6 rounded-xl shadow-md border border-gray-200; }
-        .step-number { @apply flex-shrink-0 bg-teal-500 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-2xl; }
-        .sub-step { @apply pl-6 border-l-2 border-teal-200 ml-2; }
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        .step-card {
+            @apply bg-white p-6 rounded-xl shadow-md border border-gray-200;
+        }
+        .step-number {
+            @apply flex-shrink-0 bg-teal-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg;
+        }
+        #menu {
+            transition: transform 0.3s ease-in-out;
+        }
+        #menu.closed {
+            transform: translateX(100%);
+        }
+        #menu-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-    <header class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-4">
-            <h1 class="text-2xl font-bold text-teal-600">使い方ガイド</h1>
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-teal-600">よくある質問・相談さん</h1>
+            <button id="menu-btn" class="text-gray-600 focus:outline-none z-50">
+                <i class="fas fa-bars fa-lg"></i>
+            </button>
         </div>
     </header>
 
-    <main class="container mx-auto p-4 sm:p-6">
-        <div class="max-w-3xl mx-auto space-y-8 mt-6">
-            <div class="step-card flex items-start space-x-4">
-                <div class="step-number">1</div>
-                <div>
-                    <h2 class="font-bold text-xl mb-2">ログイン</h2>
-                    <p class="text-gray-600">
-                        アプリの初期画面でパスワードの入力が求められます。管理者から共有されたパスワードを所定の欄に入力し、「ログイン」ボタンをタップしてください。正しいパスワードが入力されると、自動的に「よくある質問・相談」の一覧が表示されるメイン画面へと遷移します。
-                    </p>
-                </div>
-            </div>
+    <!-- Slide-out Menu -->
+    <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <nav id="menu" class="fixed top-0 right-0 h-full bg-white w-64 shadow-lg p-6 z-50 closed">
+        <ul class="space-y-4">
+            <li><a href="guide.html" target="_blank" class="text-gray-700 hover:text-teal-600">使い方ガイド</a></li>
+            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSckrrhDeGQajywfDx9mnGqzDiT1fUPevqi32mAK1JjutlFSlw/viewform?usp=dialog" target="_blank" class="text-gray-700 hover:text-teal-600">お問い合わせ</a></li>
+            <li><a href="#" target="_blank" class="text-gray-700 hover:text-teal-600">リリースノート</a></li>
+            <li class="pt-4 border-t mt-4"><a href="https://qcda-dev.github.io/HP/index.html" target="_blank" class="text-gray-700 hover:text-teal-600">QcDa Projectについて</a></li>
+        </ul>
+        <p class="absolute bottom-4 right-4 text-xs text-gray-400">ver1.2</p>
+    </nav>
 
-            <div class="step-card flex items-start space-x-4">
-                <div class="step-number">2</div>
-                <div>
-                    <h2 class="font-bold text-xl mb-2">質問を探す</h2>
-                    <p class="text-gray-600">
-                        メイン画面には、これまでに投稿された質問と回答が表示されています。特定の情報を探したい場合は、画面上部にある「タグで絞り込み」機能が便利です。
-                        <br><br>
-                        ドロップダウンメニューから関心のあるタグ（例：「手続き関連」「機材トラブル」など）を選択し、「表示」ボタンをタップしてください。選択したタグに関連する質問のみが一覧に表示され、効率的に情報を探すことができます。
-                        タグを「すべてのタグ」に戻して「表示」を押すと、全件表示に戻ります。
-                    </p>
-                </div>
-            </div>
-
-            <div class="step-card flex items-start space-x-4">
-                <div class="step-number">3</div>
-                <div>
-                    <h2 class="font-bold text-xl mb-2">新しく質問する</h2>
-                    <p class="text-gray-600">
-                        一覧の中に探している情報が見つからない場合は、ご自身で新しい質問を投稿することが可能です。画面下部にある「質問・相談を投稿する」ボタンをタップすると、投稿専用の画面に移動します。
-                    </p>
-                    <div class="mt-4 space-y-4">
-                        <div class="sub-step">
-                            <h3 class="font-semibold">1. タグを選択</h3>
-                            <p class="text-gray-600 text-sm">質問内容に最も近いタグをドロップダウンから選択します。適切なタグを選ぶことで、後から他の人が情報を探しやすくなります。</p>
-                        </div>
-                        <div class="sub-step">
-                            <h3 class="font-semibold">2. 質問・相談内容 (必須)</h3>
-                            <p class="text-gray-600 text-sm">具体的な質問をテキストエリアに分かりやすく入力してください。この項目は入力必須です。</p>
-                        </div>
-                        <div class="sub-step">
-                            <h3 class="font-semibold">3. お名前・メールアドレス (任意)</h3>
-                            <p class="text-gray-600 text-sm">個別の回答が必要な場合や、誰からの質問かを明確にしたい場合は、お名前とメールアドレスを入力してください。入力は任意です。</p>
-                        </div>
+    <main class="container mx-auto px-6 py-12">
+        <section>
+            <h2 class="text-3xl font-bold text-center mb-10">使い方ガイド</h2>
+            <div class="max-w-2xl mx-auto space-y-8">
+                <!-- Step 1 -->
+                <div class="step-card flex items-start space-x-4">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">ログイン</h3>
+                        <p class="text-gray-600">
+                            アプリのURLにアクセスすると、まずログイン画面が表示されます。<br>
+                            管理者から共有されたパスワードを入力し、「ログイン」ボタンをタップしてください。
+                        </p>
                     </div>
-                     <p class="text-gray-600 mt-4">
-                        全ての入力が終わったら、「送信」ボタンをタップします。投稿された質問は管理者に通知され、回答が入力されるとFAQ一覧に追加されます。
-                    </p>
+                </div>
+                <!-- Step 2 -->
+                <div class="step-card flex items-start space-x-4">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">質問・相談を探す (一覧画面)</h3>
+                        <p class="text-gray-600">
+                            ログインに成功すると、登録されている質問と回答の一覧が表示されます。<br><br>
+                            <strong class="text-gray-800">絞り込み検索:</strong><br>
+                            画面上部の「タグで絞り込み」を使い、特定のカテゴリに関連する質問だけを表示させることができます。探したいタグを選択して「表示」ボタンをタップしてください。「すべてのタグ」を選択すると、登録されているすべての質問が表示されます。
+                        </p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="step-card flex items-start space-x-4">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">新しく質問・相談を投稿する</h3>
+                        <p class="text-gray-600">
+                            一覧画面で解決策が見つからない場合は、新しい質問を投稿できます。一覧画面の下にある「質問・相談を投稿する」ボタンをタップしてください。<br><br>
+                            <strong class="text-gray-800">投稿フォームの入力:</strong><br>
+                            <strong>・タグを選択:</strong> 質問内容に最も近いタグを選択します。<br>
+                            <strong>・質問・相談内容:</strong> 質問したい内容を具体的に入力します。(この項目は必須です)<br>
+                            <strong>・お名前/メールアドレス:</strong> 個別の回答が必要な場合や、誰からの質問か明確にしたい場合に任意で入力します。<br><br>
+                            入力後、「送信」ボタンをタップすると投稿が完了し、自動で一覧画面に戻ります。管理者が回答すると、一覧に表示されるようになります。
+                        </p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="step-card flex items-start space-x-4">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">ログアウト</h3>
+                        <p class="text-gray-600">
+                            アプリの利用が終わったら、一覧画面の下にある「ログアウト」ボタンをタップしてください。安全にセッションが終了し、ログイン画面に戻ります。
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 
     <footer class="mt-12 py-6 bg-gray-800 text-white text-center text-sm">
         <p>© 2025 QcDa Project. All Rights Reserved.</p>
     </footer>
+    
+    <script>
+        // --- Hamburger Menu ---
+        const menuBtn = document.getElementById('menu-btn');
+        const menu = document.getElementById('menu');
+        const menuOverlay = document.getElementById('menu-overlay');
 
+        function toggleMenu() {
+            menu.classList.toggle('closed');
+            menuOverlay.classList.toggle('hidden');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', toggleMenu);
+    </script>
 </body>
 </html>
 
