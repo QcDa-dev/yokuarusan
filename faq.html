@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>よくある質問・相談さん</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            transition: background-color 0.3s;
+        }
+        #menu {
+            transition: transform 0.3s ease-in-out;
+        }
+        #menu.closed {
+            transform: translateX(100%);
+        }
+        #menu-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-teal-600">よくある質問・相談さん</h1>
+            <button id="menu-btn" class="text-gray-600 focus:outline-none z-50">
+                <i class="fas fa-bars fa-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Slide-out Menu -->
+    <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <nav id="menu" class="fixed top-0 right-0 h-full bg-white w-64 shadow-lg p-6 z-50 closed">
+        <ul class="space-y-4">
+            <li><a href="guide.html" target="_blank" class="text-gray-700 hover:text-teal-600">使い方ガイド</a></li>
+            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSckrrhDeGQajywfDx9mnGqzDiT1fUPevqi32mAK1JjutlFSlw/viewform?usp=dialog" target="_blank" class="text-gray-700 hover:text-teal-600">お問い合わせ</a></li>
+            <li><a href="#" target="_blank" class="text-gray-700 hover:text-teal-600">リリースノート</a></li>
+            <li class="pt-4 border-t mt-4"><a href="https://qcda-dev.github.io/HP/index.html" target="_blank" class="text-gray-700 hover:text-teal-600">QcDa Projectについて</a></li>
+        </ul>
+        <p class="absolute bottom-4 right-4 text-xs text-gray-400">ver1.2</p>
+    </nav>
+
+    <main class="container mx-auto p-4">
+        <!-- FAQ Display Screen -->
+        <div id="faqScreen">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
+                    <label for="tagList" class="block text-sm font-medium text-gray-700 mb-2">タグで絞り込み:</label>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <select id="tagList" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"></select>
+                        <button onclick="displayFAQ()" class="w-full sm:w-auto bg-teal-500 text-white px-6 py-2 rounded-lg hover:bg-teal-600 transition duration-200">表示</button>
+                    </div>
+                </div>
+                <div id="faqResults" class="space-y-4">
+                    <!-- FAQ items will be inserted here -->
+                </div>
+                <div class="mt-8 text-center space-y-4">
+                     <button onclick="location.href='add-question.html'" class="w-full max-w-sm bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-200">質問・相談を投稿する</button>
+                     <button onclick="logout()" class="w-full max-w-sm bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-200">ログアウト</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-5 rounded-lg flex items-center">
+            <i class="fas fa-spinner fa-spin text-teal-500 text-2xl"></i>
+            <span class="ml-3 text-lg">処理中...</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 py-6 bg-gray-800 text-white text-center text-sm">
+        <p>© 2025 QcDa Project. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- Configuration ---
+        const gasWebAppUrl = 'https://script.google.com/macros/s/AKfycby-w3IpCD7YhORJs-Hjpn0c-4bpbFjvR2PBaBDiTOHfbFnXaqKwN0-j-Rf1omuYEnl6Cg/exec';
+        let globalSheetId = '';
+
+        // --- UI Navigation ---
+        function logout() {
+            sessionStorage.removeItem('faqSheetId');
+            sessionStorage.removeItem('faqTagList');
+            window.location.href = 'index.html';
+        }
+
+        // --- Hamburger Menu ---
+        const menuBtn = document.getElementById('menu-btn');
+        const menu = document.getElementById('menu');
+        const menuOverlay = document.getElementById('menu-overlay');
+
+        function toggleMenu() {
+            menu.classList.toggle('closed');
+            menuOverlay.classList.toggle('hidden');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', toggleMenu);
+
+
+        // --- API Communication ---
+        async function callGasApi(action, payload) {
+            document.getElementById('loadingIndicator').classList.remove('hidden');
+            try {
+                const response = await fetch(gasWebAppUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
+                    body: JSON.stringify({ action, ...payload }),
+                    mode: 'cors',
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                alert('サーバーとの通信中にエラーが発生しました。');
+                return null;
+            } finally {
+                document.getElementById('loadingIndicator').classList.add('hidden');
+            }
+        }
+
+        // --- Core Logic ---
+        function populateTagList(tagList) {
+            const tagDropdown = document.getElementById('tagList');
+            tagDropdown.innerHTML = '';
+            const defaultOption = new Option('すべてのタグ', '');
+            tagDropdown.add(defaultOption);
+            tagList.forEach(tag => {
+                const option = new Option(tag, tag);
+                tagDropdown.add(option);
+            });
+        }
+
+        async function displayFAQ() {
+            if (!globalSheetId) return;
+            const selectedTag = document.getElementById('tagList').value;
+            const response = await callGasApi('getFaq', { sheetId: globalSheetId, tag: selectedTag });
+            
+            const faqResults = document.getElementById('faqResults');
+            faqResults.innerHTML = '';
+
+            if (response && response.success && response.data.length > 0) {
+                response.data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white p-5 rounded-lg shadow';
+                    
+                    let tagHtml = '';
+                    if (item.tag) {
+                         tagHtml = `<div class="mb-2"><span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">${item.tag}</span></div>`;
+                    }
+                   
+                    const questionHtml = `<h3 class="text-lg font-bold text-gray-900">${item.question}</h3>`;
+                    const answerHtml = `<p class="mt-2 text-gray-600 whitespace-pre-wrap">${item.answer}</p>`;
+
+                    card.innerHTML = tagHtml + questionHtml + answerHtml;
+                    faqResults.appendChild(card);
+                });
+            } else {
+                faqResults.innerHTML = '<div class="bg-white p-5 rounded-lg shadow text-center text-gray-500"><p>該当する質問・相談はありません。</p></div>';
+            }
+        }
+        
+        // --- Initialize App ---
+        document.addEventListener('DOMContentLoaded', () => {
+            globalSheetId = sessionStorage.getItem('faqSheetId');
+            const storedTagList = sessionStorage.getItem('faqTagList');
+
+            if (!globalSheetId || !storedTagList) {
+                // If no session data, redirect to login
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const tagList = JSON.parse(storedTagList);
+            populateTagList(tagList);
+            displayFAQ();
+        });
+
+    </script>
+</body>
+</html>
+
