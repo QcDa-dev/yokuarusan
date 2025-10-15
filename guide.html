@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使い方ガイド - よくある質問・相談さん</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; }
+        .step-card { @apply bg-white p-6 rounded-xl shadow-md border border-gray-200; }
+        .step-number { @apply flex-shrink-0 bg-teal-500 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-2xl; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4">
+            <h1 class="text-2xl font-bold text-teal-600">使い方ガイド</h1>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6">
+        <div class="max-w-2xl mx-auto space-y-8 mt-6">
+            <div class="step-card flex items-start space-x-4">
+                <div class="step-number">1</div>
+                <div>
+                    <h2 class="font-bold text-xl mb-2">ログイン</h2>
+                    <p class="text-gray-600">共有されたパスワードを入力して「ログイン」ボタンを押してください。認証が成功すると、FAQ一覧画面に移動します。</p>
+                </div>
+            </div>
+
+            <div class="step-card flex items-start space-x-4">
+                <div class="step-number">2</div>
+                <div>
+                    <h2 class="font-bold text-xl mb-2">質問を探す</h2>
+                    <p class="text-gray-600">画面上部のプルダウンメニューから「タグ」を選択し、「表示」ボタンを押すと、関連する質問と回答が絞り込まれて表示されます。タグを指定しない場合は、すべての質問が表示されます。</p>
+                </div>
+            </div>
+
+            <div class="step-card flex items-start space-x-4">
+                <div class="step-number">3</div>
+                <div>
+                    <h2 class="font-bold text-xl mb-2">新しく質問する</h2>
+                    <p class="text-gray-600">探している回答が見つからない場合、「質問・相談を投稿する」ボタンから新しい質問を投稿できます。タグや質問内容、必要に応じてお名前やメールアドレスを入力して「送信」してください。管理者が回答後、一覧に反映されます。</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-12 py-6 bg-gray-800 text-white text-center text-sm">
+        <p>© 2025 QcDa Project. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
