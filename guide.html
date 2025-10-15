@@ -9,6 +9,7 @@
         body { font-family: 'Inter', 'Noto Sans JP', sans-serif; }
         .step-card { @apply bg-white p-6 rounded-xl shadow-md border border-gray-200; }
         .step-number { @apply flex-shrink-0 bg-teal-500 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-2xl; }
+        .sub-step { @apply pl-6 border-l-2 border-teal-200 ml-2; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -20,12 +21,14 @@
     </header>
 
     <main class="container mx-auto p-4 sm:p-6">
-        <div class="max-w-2xl mx-auto space-y-8 mt-6">
+        <div class="max-w-3xl mx-auto space-y-8 mt-6">
             <div class="step-card flex items-start space-x-4">
                 <div class="step-number">1</div>
                 <div>
                     <h2 class="font-bold text-xl mb-2">ログイン</h2>
-                    <p class="text-gray-600">共有されたパスワードを入力して「ログイン」ボタンを押してください。認証が成功すると、FAQ一覧画面に移動します。</p>
+                    <p class="text-gray-600">
+                        アプリの初期画面でパスワードの入力が求められます。管理者から共有されたパスワードを所定の欄に入力し、「ログイン」ボタンをタップしてください。正しいパスワードが入力されると、自動的に「よくある質問・相談」の一覧が表示されるメイン画面へと遷移します。
+                    </p>
                 </div>
             </div>
 
@@ -33,7 +36,12 @@
                 <div class="step-number">2</div>
                 <div>
                     <h2 class="font-bold text-xl mb-2">質問を探す</h2>
-                    <p class="text-gray-600">画面上部のプルダウンメニューから「タグ」を選択し、「表示」ボタンを押すと、関連する質問と回答が絞り込まれて表示されます。タグを指定しない場合は、すべての質問が表示されます。</p>
+                    <p class="text-gray-600">
+                        メイン画面には、これまでに投稿された質問と回答が表示されています。特定の情報を探したい場合は、画面上部にある「タグで絞り込み」機能が便利です。
+                        <br><br>
+                        ドロップダウンメニューから関心のあるタグ（例：「手続き関連」「機材トラブル」など）を選択し、「表示」ボタンをタップしてください。選択したタグに関連する質問のみが一覧に表示され、効率的に情報を探すことができます。
+                        タグを「すべてのタグ」に戻して「表示」を押すと、全件表示に戻ります。
+                    </p>
                 </div>
             </div>
 
@@ -41,7 +49,26 @@
                 <div class="step-number">3</div>
                 <div>
                     <h2 class="font-bold text-xl mb-2">新しく質問する</h2>
-                    <p class="text-gray-600">探している回答が見つからない場合、「質問・相談を投稿する」ボタンから新しい質問を投稿できます。タグや質問内容、必要に応じてお名前やメールアドレスを入力して「送信」してください。管理者が回答後、一覧に反映されます。</p>
+                    <p class="text-gray-600">
+                        一覧の中に探している情報が見つからない場合は、ご自身で新しい質問を投稿することが可能です。画面下部にある「質問・相談を投稿する」ボタンをタップすると、投稿専用の画面に移動します。
+                    </p>
+                    <div class="mt-4 space-y-4">
+                        <div class="sub-step">
+                            <h3 class="font-semibold">1. タグを選択</h3>
+                            <p class="text-gray-600 text-sm">質問内容に最も近いタグをドロップダウンから選択します。適切なタグを選ぶことで、後から他の人が情報を探しやすくなります。</p>
+                        </div>
+                        <div class="sub-step">
+                            <h3 class="font-semibold">2. 質問・相談内容 (必須)</h3>
+                            <p class="text-gray-600 text-sm">具体的な質問をテキストエリアに分かりやすく入力してください。この項目は入力必須です。</p>
+                        </div>
+                        <div class="sub-step">
+                            <h3 class="font-semibold">3. お名前・メールアドレス (任意)</h3>
+                            <p class="text-gray-600 text-sm">個別の回答が必要な場合や、誰からの質問かを明確にしたい場合は、お名前とメールアドレスを入力してください。入力は任意です。</p>
+                        </div>
+                    </div>
+                     <p class="text-gray-600 mt-4">
+                        全ての入力が終わったら、「送信」ボタンをタップします。投稿された質問は管理者に通知され、回答が入力されるとFAQ一覧に追加されます。
+                    </p>
                 </div>
             </div>
         </div>
@@ -53,3 +80,4 @@
 
 </body>
 </html>
+
