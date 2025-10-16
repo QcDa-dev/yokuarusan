@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リリースノート - よくある質問・相談さん</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- marked.js for Markdown to HTML conversion -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+        #menu {
+            transition: transform 0.3s ease-in-out;
+        }
+        #menu.closed {
+            transform: translateX(100%);
+        }
+        #menu-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .hidden {
+            display: none;
+        }
+        /* Styles for release note content */
+        .release-content h1, .release-content h2, .release-content h3 { @apply text-xl font-bold mt-4 mb-2 border-b pb-1; }
+        .release-content ul { @apply list-disc list-inside ml-4; }
+        .release-content li { @apply mb-1; }
+        .release-content p { @apply mb-2; }
+        .release-content a { @apply text-teal-600 hover:underline; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-teal-600">よくある質問・相談さん</h1>
+            <button id="menu-btn" class="text-gray-600 focus:outline-none z-50">
+                <i class="fas fa-bars fa-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Slide-out Menu -->
+    <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <nav id="menu" class="fixed top-0 right-0 h-full bg-white w-64 shadow-lg p-6 z-50 closed">
+        <ul class="space-y-4">
+            <li><a href="guide.html" target="_blank" class="text-gray-700 hover:text-teal-600">使い方ガイド</a></li>
+            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSckrrhDeGQajywfDx9mnGqzDiT1fUPevqi32mAK1JjutlFSlw/viewform?usp=dialog" target="_blank" class="text-gray-700 hover:text-teal-600">お問い合わせ</a></li>
+            <li><a href="release-notes.html" target="_blank" class="text-gray-700 hover:text-teal-600">リリースノート</a></li>
+            <li class="pt-4 border-t mt-4"><a href="https://qcda-dev.github.io/HP/index.html" target="_blank" class="text-gray-700 hover:text-teal-600">QcDa Projectについて</a></li>
+        </ul>
+        <p class="absolute bottom-4 right-4 text-xs text-gray-400">ver1.3</p>
+    </nav>
+
+    <main class="container mx-auto px-6 py-12">
+        <section>
+            <h2 class="text-3xl font-bold text-center mb-10">リリースノート</h2>
+            <div id="release-notes-container" class="max-w-3xl mx-auto space-y-8">
+                <!-- Release notes will be loaded here -->
+            </div>
+             <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="text-center py-10">
+                <i class="fas fa-spinner fa-spin text-teal-500 text-3xl"></i>
+                <p class="mt-2 text-gray-600">読み込み中...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-12 py-6 bg-gray-800 text-white text-center text-sm">
+        <p>© 2025 QcDa Project. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- Hamburger Menu ---
+        const menuBtn = document.getElementById('menu-btn');
+        const menu = document.getElementById('menu');
+        const menuOverlay = document.getElementById('menu-overlay');
+
+        function toggleMenu() {
+            menu.classList.toggle('closed');
+            menuOverlay.classList.toggle('hidden');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', toggleMenu);
+        
+        // --- GitHub Release Notes Fetcher ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // IMPORTANT: Replace with your GitHub username and repository name
+            const GITHUB_USER = 'qcda-dev';
+            const GITHUB_REPO = 'faq-san'; // Example repository name
+
+            const container = document.getElementById('release-notes-container');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/releases`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(releases => {
+                    loadingIndicator.classList.add('hidden');
+                    if (releases.length === 0) {
+                        container.innerHTML = '<p class="text-center text-gray-500">リリース情報はまだありません。</p>';
+                        return;
+                    }
+
+                    releases.forEach(release => {
+                        const releaseDate = new Date(release.published_at).toLocaleDateString('ja-JP');
+                        
+                        const releaseElement = document.createElement('div');
+                        releaseElement.className = 'bg-white p-6 rounded-xl shadow-md';
+                        
+                        // Use marked.js to parse Markdown body
+                        const releaseBodyHtml = marked.parse(release.body);
+
+                        releaseElement.innerHTML = `
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-2xl font-bold text-gray-900">${release.name || release.tag_name}</h3>
+                                <span class="text-sm text-gray-500">${releaseDate}</span>
+                            </div>
+                            <div class="release-content text-gray-700">${releaseBodyHtml}</div>
+                        `;
+                        container.appendChild(releaseElement);
+                    });
+                })
+                .catch(error => {
+                    loadingIndicator.classList.add('hidden');
+                    console.error('Error fetching release notes:', error);
+                    container.innerHTML = '<p class="text-center text-red-500">リリース情報の取得に失敗しました。リポジトリが非公開になっていないか、または指定したユーザー名とリポジトリ名が正しいか確認してください。</p>';
+                });
+        });
+    </script>
+</body>
+</html>
