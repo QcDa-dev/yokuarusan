@@ -1,0 +1,57 @@
+/* QcDa Project - 共通スタイルシート
+  (よくある質問・相談さん)
+*/
+
+/* 基本レイアウトとフォント設定 */
+body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    transition: background-color 0.3s;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f3f4f6; /* bg-gray-100 */
+    color: #1f2937; /* text-gray-800 */
+}
+
+main {
+    flex-grow: 1;
+}
+
+/* 共通フッター */
+footer {
+    background-color: #1f2937; /* bg-gray-800 */
+    color: #ffffff; /* text-white */
+    text-align: center;
+    font-size: 0.875rem; /* text-sm */
+    padding-top: 1.5rem; /* py-6 */
+    padding-bottom: 1.5rem; /* py-6 */
+}
+
+/* 共通ヘッダー（Tailwindで定義されているため、ここでは主にハンバーガーメニュー） */
+#menu {
+    transition: transform 0.3s ease-in-out;
+}
+
+#menu.closed {
+    transform: translateX(100%);
+}
+
+#menu-overlay {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* 共通ユーティリティクラス */
+.hidden {
+    display: none;
+}
+
+/* 共通ローディングインジケーター */
+#loadingIndicator {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
