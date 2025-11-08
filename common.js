@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li><a href="https://qcda-dev.github.io/HP/terms-of-service.html" target="_blank" class="text-gray-500 hover:text-teal-500 pl-4 text-sm">利用規約</a></li>
                 <li><a href="https://qcda-dev.github.io/HP/community-guidelines.html" target="_blank" class="text-gray-500 hover:text-teal-500 pl-4 text-sm">コミュニティガイドライン</a></li>
             </ul>
-            <p class="absolute bottom-4 right-4 text-xs text-gray-400">ver ${version}</p>
+            <p class="absolute bottom-4 right-4 text-xs text-gray-400">ver 1.4</p>
         `;
     }
 
