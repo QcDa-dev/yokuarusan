@@ -139,10 +139,18 @@
             }
         }
         
-        // Clear session storage on login page load
+        // Check session on login page load
         document.addEventListener('DOMContentLoaded', () => {
-            sessionStorage.removeItem('faqSheetId');
-            sessionStorage.removeItem('faqTagList');
+            const sheetId = sessionStorage.getItem('faqSheetId');
+            
+            if (sheetId) {
+                // If already logged in (session exists), redirect to main app page
+                window.location.href = 'faq.html';
+            } else {
+                // If not logged in, ensure session is clear
+                sessionStorage.removeItem('faqSheetId');
+                sessionStorage.removeItem('faqTagList');
+            }
         });
     </script>
 </body>
