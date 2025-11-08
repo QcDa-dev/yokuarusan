@@ -6,15 +6,15 @@
 body {
     font-family: 'Inter', 'Noto Sans JP', sans-serif;
     transition: background-color 0.3s;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    display: flex; /* フッターを最下部に固定するため */
+    flex-direction: column; /* フッターを最下部に固定するため */
+    min-height: 100vh; /* フッターを最下部に固定するため */
     background-color: #f3f4f6; /* bg-gray-100 */
     color: #1f2937; /* text-gray-800 */
 }
 
 main {
-    flex-grow: 1;
+    flex-grow: 1; /* フッターを最下部に固定するため */
 }
 
 /* 共通フッター */
@@ -25,9 +25,10 @@ footer {
     font-size: 0.875rem; /* text-sm */
     padding-top: 1.5rem; /* py-6 */
     padding-bottom: 1.5rem; /* py-6 */
+    margin-top: 3rem; /* mt-12 (各ページのfooterマージンを統一) */
 }
 
-/* 共通ヘッダー（Tailwindで定義されているため、ここでは主にハンバーガーメニュー） */
+/* 共通ヘッダー（ハンバーガーメニュー） */
 #menu {
     transition: transform 0.3s ease-in-out;
 }
